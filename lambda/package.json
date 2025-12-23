@@ -1,0 +1,11 @@
+{
+  "name": "wallyweb-lambda",
+  "version": "1.0.0",
+  "description": "AWS Lambda function for WallyWeb contact form",
+  "main": "contact.js",
+  "dependencies": {
+    "nodemailer": "^6.9.7",
+    "aws-sdk": "^2.1691.0"
+  }
+}
+
