@@ -188,3 +188,4 @@ echo "   2. Hard refresh your browser (Cmd+Shift+R)"
 echo "   3. Check that ALLOWED_ORIGIN in Lambda matches your website URL"
 echo ""
 
+

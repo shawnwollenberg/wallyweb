@@ -71,6 +71,13 @@ if [ -f "script.js" ]; then
         --profile "$AWS_PROFILE"
 fi
 
+# Upload favicon
+if [ -f "favicon.svg" ]; then
+    aws s3 cp favicon.svg "s3://$BUCKET_NAME/favicon.svg" \
+        --content-type "image/svg+xml" \
+        --profile "$AWS_PROFILE"
+fi
+
 # Upload any other files (images, etc.) - these will use default content types
 # Note: We exclude the files we already uploaded with correct content types
 echo "📤 Uploading other files..."
@@ -88,10 +95,42 @@ aws s3 sync . "s3://$BUCKET_NAME" \
     --exclude "index.html" \
     --exclude "styles.css" \
     --exclude "script.js" \
+    --exclude "favicon.svg" \
     --delete \
     --profile "$AWS_PROFILE"
 
-# Content types are already set during upload above
+# Verify content types are correct
+echo ""
+echo "🔍 Verifying content types..."
+CSS_TYPE=$(aws s3api head-object --bucket "$BUCKET_NAME" --key styles.css --profile "$AWS_PROFILE" --query 'ContentType' --output text 2>/dev/null)
+JS_TYPE=$(aws s3api head-object --bucket "$BUCKET_NAME" --key script.js --profile "$AWS_PROFILE" --query 'ContentType' --output text 2>/dev/null)
+HTML_TYPE=$(aws s3api head-object --bucket "$BUCKET_NAME" --key index.html --profile "$AWS_PROFILE" --query 'ContentType' --output text 2>/dev/null)
+
+if [ "$CSS_TYPE" != "text/css" ]; then
+    echo "⚠️  Fixing CSS content type..."
+    aws s3 cp "s3://$BUCKET_NAME/styles.css" "s3://$BUCKET_NAME/styles.css" \
+        --content-type "text/css" \
+        --metadata-directive REPLACE \
+        --profile "$AWS_PROFILE" > /dev/null
+fi
+
+if [ "$JS_TYPE" != "application/javascript" ]; then
+    echo "⚠️  Fixing JS content type..."
+    aws s3 cp "s3://$BUCKET_NAME/script.js" "s3://$BUCKET_NAME/script.js" \
+        --content-type "application/javascript" \
+        --metadata-directive REPLACE \
+        --profile "$AWS_PROFILE" > /dev/null
+fi
+
+if [ "$HTML_TYPE" != "text/html" ]; then
+    echo "⚠️  Fixing HTML content type..."
+    aws s3 cp "s3://$BUCKET_NAME/index.html" "s3://$BUCKET_NAME/index.html" \
+        --content-type "text/html" \
+        --metadata-directive REPLACE \
+        --profile "$AWS_PROFILE" > /dev/null
+fi
+
+echo "✅ Content types verified"
 
 # Set cache control (optional - cache static assets)
 echo "⚙️  Setting cache headers..."

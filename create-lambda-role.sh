@@ -151,3 +151,4 @@ echo ""
 # Cleanup
 rm -f /tmp/trust-policy.json
 
+
