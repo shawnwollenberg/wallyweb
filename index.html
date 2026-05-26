@@ -3,30 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WallyWeb - Custom Software Solutions</title>
+    <meta name="theme-color" content="#08111f">
+    <meta name="description" content="WallyWeb builds AI solutions for agentic commerce, wallet intelligence, automation, and operational workflows. Explore Cortex and walletLens.">
+    <title>WallyWeb - AI Solutions Platform</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="apple-touch-icon" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
-                <div class="logo">
+                <a class="logo" href="#home" aria-label="WallyWeb home">
                     <span class="logo-icon">W</span>
                     <span class="logo-text">WallyWeb</span>
-                </div>
+                </a>
                 <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">About</a></li>
+                    <li><a href="#solutions">Solutions</a></li>
+                    <li><a href="#cortex">Cortex</a></li>
+                    <li><a href="#walletlens">walletLens</a></li>
+                    <li><a href="#platform">Platform</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" type="button">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -35,148 +37,298 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Custom Software Solutions for Modern Business</h1>
-                <p class="hero-subtitle">Specializing in Finance, Web3, and Pricing Applications</p>
-                <div class="hero-buttons">
-                    <a href="#contact" class="btn btn-primary">Get Started</a>
-                    <a href="#services" class="btn btn-secondary">Learn More</a>
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-grid container">
+                <div class="hero-content">
+                    <p class="eyebrow">AI solutions for agent-ready businesses</p>
+                    <h1 class="hero-title">WallyWeb builds systems that agents can use.</h1>
+                    <p class="hero-subtitle">From agentic commerce infrastructure to wallet intelligence APIs, WallyWeb turns practical AI workflows into live products, tools, and protocols.</p>
+                    <div class="hero-buttons">
+                        <a href="#solutions" class="btn btn-primary">Explore solutions</a>
+                        <a href="https://cortex.wallyweb.com" class="btn btn-secondary" target="_blank" rel="noopener">Open Cortex</a>
+                    </div>
+                    <div class="hero-proof" aria-label="Platform signals">
+                        <span>Agent-native APIs</span>
+                        <span>x402 payments</span>
+                        <span>MCP-ready tooling</span>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="hero-background"></div>
-    </section>
 
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="container">
-            <h2 class="section-title">Our Expertise</h2>
-            <p class="section-subtitle">We build custom software solutions tailored to your business needs</p>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">💰</div>
-                    <h3>Finance Applications</h3>
-                    <p>Custom financial software solutions including payment processing, accounting systems, financial analytics, and trading platforms.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">⛓️</div>
-                    <h3>Web3 Solutions</h3>
-                    <p>Blockchain integration, smart contracts, DeFi applications, NFT platforms, and decentralized application development.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">📊</div>
-                    <h3>Pricing Systems</h3>
-                    <p>Dynamic pricing engines, revenue optimization tools, price analytics dashboards, and automated pricing strategies.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2 class="section-title">About WallyWeb</h2>
-                    <p>WallyWeb is a specialized software development company focused on building custom applications that drive business value. With deep expertise in Finance, Web3, and Pricing technologies, we help businesses transform their operations through innovative software solutions.</p>
-                    <p>Our team combines technical excellence with business acumen to deliver solutions that are not just functional, but strategically aligned with your goals. Whether you need a fintech platform, a blockchain integration, or a sophisticated pricing engine, we have the expertise to bring your vision to life.</p>
-                    <div class="about-features">
-                        <div class="feature-item">
-                            <span class="feature-check">✓</span>
-                            <span>Custom Development</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-check">✓</span>
-                            <span>Modern Technology Stack</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-check">✓</span>
-                            <span>Scalable Solutions</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-check">✓</span>
-                            <span>Ongoing Support</span>
-                        </div>
+                <div class="agent-visual" aria-label="Agentic platform visualization">
+                    <div class="visual-header">
+                        <span class="status-dot"></span>
+                        <span>WallyWeb agent mesh</span>
+                    </div>
+                    <div class="signal-map">
+                        <div class="node node-core">AI</div>
+                        <div class="node node-cortex">Cortex</div>
+                        <div class="node node-wallet">walletLens</div>
+                        <div class="node node-api">API</div>
+                    </div>
+                    <div class="terminal-panel">
+                        <div><span class="prompt">&gt;</span> agent.request("wallet portfolio")</div>
+                        <div><span class="prompt">&gt;</span> walletLens.resolve(EVM)</div>
+                        <div><span class="prompt">&gt;</span> cortex.settle(x402)</div>
+                        <div class="terminal-ok">ready_for_next_action: true</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <p class="section-subtitle">Let's discuss how we can help build your next software solution</p>
-            <div class="contact-content">
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="company">Company (Optional)</label>
-                        <input type="text" id="company" name="company">
-                    </div>
-                    <div class="form-group">
-                        <label for="service">Service Interest</label>
-                        <select id="service" name="service" required>
-                            <option value="">Select a service...</option>
-                            <option value="finance">Finance Applications</option>
-                            <option value="web3">Web3 Solutions</option>
-                            <option value="pricing">Pricing Systems</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                    <div id="formMessage" class="form-message"></div>
-                </form>
+        <section id="solutions" class="solutions">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Initial solutions</p>
+                    <h2 class="section-title">Two live AI products, one expanding platform.</h2>
+                    <p class="section-subtitle">WallyWeb is moving from bespoke software delivery to a portfolio of agentic products that expose useful work through clean interfaces, pay-per-use access, and AI-friendly documentation.</p>
+                </div>
+
+                <div class="solutions-grid">
+                    <article id="cortex" class="solution-card solution-card-featured">
+                        <div class="solution-topline">
+                            <span class="solution-badge">Featured platform</span>
+                            <span class="solution-status">Live</span>
+                        </div>
+                        <h3>Cortex</h3>
+                        <p class="solution-lede">A base layer for agentic commerce workflows at <a href="https://cortex.wallyweb.com" target="_blank" rel="noopener">cortex.wallyweb.com</a>.</p>
+                        <p>Cortex is where WallyWeb is building the commerce and automation primitives that let AI agents discover capabilities, execute paid actions, and coordinate with services without a human manually stitching the workflow together.</p>
+                        <ul class="solution-list">
+                            <li>Agent-facing commerce endpoints</li>
+                            <li>Protocol-first workflow design</li>
+                            <li>Payments, automation, and operational rails</li>
+                        </ul>
+                        <a href="https://cortex.wallyweb.com" class="text-link" target="_blank" rel="noopener">Visit Cortex</a>
+                    </article>
+
+                    <article id="walletlens" class="solution-card">
+                        <div class="solution-topline">
+                            <span class="solution-badge">Wallet intelligence</span>
+                            <span class="solution-status">Live</span>
+                        </div>
+                        <h3>walletLens</h3>
+                        <p class="solution-lede">An agent-native API for normalized EVM wallet portfolio intelligence.</p>
+                        <p>One request returns token balances, USD pricing, recent activity, and a pre-computed portfolio summary across Base, Ethereum, Optimism, Arbitrum, and Polygon.</p>
+                        <ul class="solution-list">
+                            <li>Pay-per-call x402 access</li>
+                            <li>OpenAPI, llms.txt, and agent skill docs</li>
+                            <li>Local MCP server support</li>
+                        </ul>
+                        <a href="https://walletlens.wallyweb.com" class="text-link" target="_blank" rel="noopener">Visit walletLens</a>
+                    </article>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
+        <section class="launches">
+            <div class="container">
+                <div class="launch-card">
+                    <div class="launch-header">
+                        <span class="launch-badge">
+                            <span class="launch-pulse" aria-hidden="true"></span>
+                            Live agent-native API
+                        </span>
+                        <h2 class="launch-title">walletLens</h2>
+                        <p class="launch-tagline">A paid <abbr title="HTTP-native pay-per-call protocol">x402</abbr> API and local <abbr title="Model Context Protocol">MCP</abbr> server for AI agents that need normalized EVM wallet portfolio data.</p>
+                    </div>
+
+                    <p class="launch-lede">Agents can call walletLens directly for token balances, USD pricing, recent activity, portfolio summaries, stablecoin exposure, top positions, and data-coverage warnings for any <code>0x</code> address across five EVM chains.</p>
+
+                    <ul class="launch-stats">
+                        <li><strong>5</strong><span>EVM chains</span></li>
+                        <li><strong>$0.02</strong><span>per call, USDC</span></li>
+                        <li><strong>x402</strong><span>on Base mainnet</span></li>
+                    </ul>
+
+                    <div class="launch-chains" aria-label="Supported chains">
+                        <span class="chain-pill">Base</span>
+                        <span class="chain-pill">Ethereum</span>
+                        <span class="chain-pill">Optimism</span>
+                        <span class="chain-pill">Arbitrum</span>
+                        <span class="chain-pill">Polygon</span>
+                    </div>
+
+                    <div class="launch-resources">
+                        <h3>Agent resources</h3>
+                        <p class="launch-resources-sub">Drop these into agents that understand Markdown, OpenAPI, or the <code>llms.txt</code> convention, or run the MCP server locally for Claude Desktop and Cursor.</p>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">Agent skill</span>
+                                    <a class="resource-url" href="https://walletlens.wallyweb.com/docs/walletlens-agent-skill.md" target="_blank" rel="noopener">walletlens.wallyweb.com/docs/walletlens-agent-skill.md</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://walletlens.wallyweb.com/docs/walletlens-agent-skill.md" aria-label="Copy agent skill URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">LLM index</span>
+                                    <a class="resource-url" href="https://walletlens.wallyweb.com/llms.txt" target="_blank" rel="noopener">walletlens.wallyweb.com/llms.txt</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://walletlens.wallyweb.com/llms.txt" aria-label="Copy LLM index URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">LLM full docs</span>
+                                    <a class="resource-url" href="https://walletlens.wallyweb.com/llms-full.txt" target="_blank" rel="noopener">walletlens.wallyweb.com/llms-full.txt</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://walletlens.wallyweb.com/llms-full.txt" aria-label="Copy full LLM docs URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">OpenAPI spec</span>
+                                    <a class="resource-url" href="https://walletlens.wallyweb.com/openapi.json" target="_blank" rel="noopener">walletlens.wallyweb.com/openapi.json</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://walletlens.wallyweb.com/openapi.json" aria-label="Copy OpenAPI URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                            <li class="resource-item resource-item-mcp">
+                                <div class="resource-meta">
+                                    <span class="resource-label">
+                                        <span class="resource-label-text">MCP server</span>
+                                        <span class="resource-badge">Local</span>
+                                    </span>
+                                    <code class="resource-url">npm run mcp</code>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="npm run mcp" aria-label="Copy MCP server command">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="launch-cta">
+                        <a href="https://walletlens.wallyweb.com" class="btn btn-primary" target="_blank" rel="noopener">Open walletLens</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="platform" class="platform">
+            <div class="container platform-grid">
+                <div>
+                    <p class="eyebrow">How WallyWeb builds</p>
+                    <h2 class="section-title align-left">Practical AI, exposed as real product surfaces.</h2>
+                    <p class="section-subtitle align-left">The platform is designed around tools agents can discover, call, pay for, and reason about. That means useful APIs, clear documentation, structured outputs, and reliable operating paths.</p>
+                </div>
+                <div class="capability-grid">
+                    <div class="capability">
+                        <span>01</span>
+                        <h3>Agent interfaces</h3>
+                        <p>APIs, MCP tools, OpenAPI specs, and llms.txt resources that give agents the context they need.</p>
+                    </div>
+                    <div class="capability">
+                        <span>02</span>
+                        <h3>Commerce rails</h3>
+                        <p>Pay-per-use access patterns built for automated calls, not enterprise procurement cycles.</p>
+                    </div>
+                    <div class="capability">
+                        <span>03</span>
+                        <h3>Operational systems</h3>
+                        <p>Workflow automation, monitoring, and integrations that turn AI output into completed work.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container about-content">
+                <p class="eyebrow">About WallyWeb</p>
+                <h2 class="section-title">An AI solutions lab with production discipline.</h2>
+                <p>WallyWeb builds focused AI products for finance, Web3, commerce, and automation. The direction is simple: useful capabilities should be easy for people to try, easy for agents to call, and reliable enough to plug into real workflows.</p>
+                <div class="about-features">
+                    <div class="feature-item"><span class="feature-check">✓</span><span>Agent-ready product design</span></div>
+                    <div class="feature-item"><span class="feature-check">✓</span><span>Finance and Web3 expertise</span></div>
+                    <div class="feature-item"><span class="feature-check">✓</span><span>Protocol-aware integrations</span></div>
+                    <div class="feature-item"><span class="feature-check">✓</span><span>Scalable cloud delivery</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Contact</p>
+                    <h2 class="section-title">Build or integrate an AI workflow.</h2>
+                    <p class="section-subtitle">Reach out about Cortex, walletLens, agentic commerce, wallet intelligence, or a new AI solution that should become part of the WallyWeb platform.</p>
+                </div>
+                <div class="contact-content">
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company (Optional)</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Interest</label>
+                            <select id="service" name="service" required>
+                                <option value="">Select an interest...</option>
+                                <option value="cortex">Cortex</option>
+                                <option value="walletlens">walletLens</option>
+                                <option value="agentic-commerce">Agentic commerce</option>
+                                <option value="ai-workflow">AI workflow automation</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <div id="formMessage" class="form-message"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <div class="logo">
+                    <a class="logo" href="#home" aria-label="WallyWeb home">
                         <span class="logo-icon">W</span>
                         <span class="logo-text">WallyWeb</span>
-                    </div>
-                    <p>Custom Software Solutions</p>
+                    </a>
+                    <p>AI solutions for agentic commerce, wallet intelligence, and automation.</p>
                 </div>
                 <div class="footer-links">
-                    <h4>Quick Links</h4>
+                    <h4>Explore</h4>
                     <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#services">Services</a></li>
+                        <li><a href="#solutions">Solutions</a></li>
+                        <li><a href="#platform">Platform</a></li>
                         <li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-services">
-                    <h4>Services</h4>
+                    <h4>Solutions</h4>
                     <ul>
-                        <li>Finance Applications</li>
-                        <li>Web3 Solutions</li>
-                        <li>Pricing Systems</li>
+                        <li><a href="https://cortex.wallyweb.com" target="_blank" rel="noopener">Cortex</a></li>
+                        <li><a href="https://walletlens.wallyweb.com" target="_blank" rel="noopener">walletLens</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 WallyWeb. All rights reserved.</p>
+                <p>&copy; 2026 WallyWeb. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -187,5 +339,3 @@
     </script>
 </body>
 </html>
-
-

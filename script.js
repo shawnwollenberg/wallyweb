@@ -122,6 +122,35 @@ function showFormMessage(message, type) {
     formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// Copy-to-clipboard on resource buttons
+document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const text = btn.dataset.copy;
+        if (!text) return;
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch {}
+            document.body.removeChild(ta);
+        }
+        const label = btn.querySelector('.copy-label');
+        const originalLabel = label ? label.textContent : '';
+        btn.classList.add('copied');
+        if (label) label.textContent = 'Copied';
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            if (label) label.textContent = originalLabel;
+        }, 1500);
+    });
+});
+
 // Intersection Observer for fade-in animations
 const observerOptions = {
     threshold: 0.1,
@@ -139,7 +168,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe service cards and other elements
 document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.service-card, .about-content, .contact-form');
+    const animatedElements = document.querySelectorAll('.solution-card, .capability, .about-content, .contact-form, .launch-card, .agent-visual');
     animatedElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
@@ -147,4 +176,3 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 });
-
