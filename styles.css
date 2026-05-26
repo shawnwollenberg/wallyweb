@@ -555,6 +555,16 @@ a {
     box-shadow: var(--shadow);
 }
 
+.launches .container + .container {
+    margin-top: 1.25rem;
+}
+
+.cortex-card {
+    background:
+        radial-gradient(circle at 88% 16%, rgba(247, 185, 85, 0.14), transparent 34%),
+        linear-gradient(180deg, rgba(17, 31, 50, 0.96), rgba(8, 17, 31, 0.98));
+}
+
 .launch-header {
     margin-bottom: 1.4rem;
 }
@@ -656,6 +666,42 @@ a {
     padding: 0.38rem 0.72rem;
     font-size: 0.84rem;
     font-weight: 700;
+}
+
+.cortex-flow {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin: 1.6rem 0 2rem;
+}
+
+.flow-item {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.045);
+    padding: 1rem;
+}
+
+.flow-item span {
+    display: inline-flex;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    font-weight: 800;
+    margin-bottom: 0.7rem;
+}
+
+.flow-item strong {
+    display: block;
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+}
+
+.flow-item p {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
 }
 
 .launch-resources {
@@ -1024,6 +1070,10 @@ a {
         grid-template-columns: 1fr;
     }
 
+    .cortex-flow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .resource-item {
         align-items: flex-start;
         flex-direction: column;
@@ -1094,5 +1144,9 @@ a {
 
     .resource-url {
         font-size: 0.74rem;
+    }
+
+    .cortex-flow {
+        grid-template-columns: 1fr;
     }
 }

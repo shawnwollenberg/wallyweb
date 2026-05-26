@@ -122,6 +122,101 @@
 
         <section class="launches">
             <div class="container">
+                <div class="launch-card cortex-card">
+                    <div class="launch-header">
+                        <span class="launch-badge">
+                            <span class="launch-pulse" aria-hidden="true"></span>
+                            Base-native commerce protocol
+                        </span>
+                        <h2 class="launch-title">Cortex</h2>
+                        <p class="launch-tagline">The commerce layer for autonomous agents on Base: service discovery, delegated budgets, payment terms, receipts, disputes, and machine-readable protocol state.</p>
+                    </div>
+
+                    <p class="launch-lede">Cortex gives agents and merchants a shared way to publish services, commit quote terms, execute payments, and record the signals that make commerce auditable. It supports wallet transfers, ERC-20 transfers, swaps, facilitator-mediated settlement, and x402 without requiring a new chain.</p>
+
+                    <ul class="launch-stats">
+                        <li><strong>Base</strong><span>native network</span></li>
+                        <li><strong>0 bps</strong><span>protocol fees</span></li>
+                        <li><strong>API + MCP</strong><span>agent access</span></li>
+                    </ul>
+
+                    <div class="cortex-flow" aria-label="Cortex commerce flow">
+                        <div class="flow-item">
+                            <span>01</span>
+                            <strong>Discover</strong>
+                            <p>Merchants publish service records with metadata, capabilities, payout context, and active status.</p>
+                        </div>
+                        <div class="flow-item">
+                            <span>02</span>
+                            <strong>Authorize</strong>
+                            <p>Owners configure agent budgets, allowlists, swap permissions, facilitator budgets, and x402 policy.</p>
+                        </div>
+                        <div class="flow-item">
+                            <span>03</span>
+                            <strong>Commit</strong>
+                            <p>Quotes bind service, agent, token, amount, payment rail, expiry, resource hash, and terms hash.</p>
+                        </div>
+                        <div class="flow-item">
+                            <span>04</span>
+                            <strong>Settle</strong>
+                            <p>Receipts, disputes, solver activity, and analytics become indexed state for agents and dashboards.</p>
+                        </div>
+                    </div>
+
+                    <div class="launch-resources">
+                        <h3>Protocol resources</h3>
+                        <p class="launch-resources-sub">Use these to understand the protocol, inspect live state, or wire Cortex into agent workflows.</p>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">Overview</span>
+                                    <a class="resource-url" href="https://cortex.wallyweb.com/overview/" target="_blank" rel="noopener">cortex.wallyweb.com/overview</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://cortex.wallyweb.com/overview/" aria-label="Copy Cortex overview URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">Dashboard</span>
+                                    <a class="resource-url" href="https://cortex.wallyweb.com/dashboard/" target="_blank" rel="noopener">cortex.wallyweb.com/dashboard</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://cortex.wallyweb.com/dashboard/" aria-label="Copy Cortex dashboard URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">Docs</span>
+                                    <a class="resource-url" href="https://cortex.wallyweb.com/docs/" target="_blank" rel="noopener">cortex.wallyweb.com/docs</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://cortex.wallyweb.com/docs/" aria-label="Copy Cortex docs URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">LLM index</span>
+                                    <a class="resource-url" href="https://cortex.wallyweb.com/llms.txt" target="_blank" rel="noopener">cortex.wallyweb.com/llms.txt</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://cortex.wallyweb.com/llms.txt" aria-label="Copy Cortex LLM index URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="launch-cta">
+                        <a href="https://cortex.wallyweb.com" class="btn btn-primary" target="_blank" rel="noopener">Open Cortex</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
                 <div class="launch-card">
                     <div class="launch-header">
                         <span class="launch-badge">
