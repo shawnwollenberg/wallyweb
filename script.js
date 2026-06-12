@@ -168,7 +168,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe service cards and other elements
 document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.solution-card, .capability, .about-content, .contact-form, .launch-card, .agent-visual');
+    const animatedElements = document.querySelectorAll('.solution-card, .capability, .about-content, .contact-form, .launch-card, .agent-visual, .post-card, .topic-card');
     animatedElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
