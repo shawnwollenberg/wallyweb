@@ -330,11 +330,18 @@ a {
     background: linear-gradient(135deg, var(--primary), var(--accent));
 }
 
+.node-servicepilot {
+    width: 136px;
+    height: 58px;
+    left: 34px;
+    bottom: 28px;
+}
+
 .node-cortex {
     width: 118px;
     height: 58px;
     left: 16px;
-    top: 44px;
+    top: 32px;
 }
 
 .node-aegis {
@@ -351,13 +358,6 @@ a {
     height: 58px;
     right: 12px;
     top: 178px;
-}
-
-.node-api {
-    width: 86px;
-    height: 52px;
-    left: 34px;
-    bottom: 28px;
 }
 
 .terminal-panel {
@@ -422,7 +422,7 @@ a {
 
 .solutions-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.25rem;
 }
 
@@ -448,6 +448,12 @@ a {
         radial-gradient(circle at 90% 10%, rgba(40, 214, 194, 0.18), transparent 32%),
         linear-gradient(145deg, #0d1a2b, #12253b);
     border-color: rgba(148, 163, 184, 0.26);
+}
+
+.servicepilot-solution {
+    background:
+        radial-gradient(circle at 92% 12%, rgba(247, 185, 85, 0.2), transparent 34%),
+        linear-gradient(145deg, #0d1a2b, #12253b);
 }
 
 .solution-topline {
@@ -572,6 +578,12 @@ a {
 .cortex-card {
     background:
         radial-gradient(circle at 88% 16%, rgba(247, 185, 85, 0.14), transparent 34%),
+        linear-gradient(180deg, rgba(17, 31, 50, 0.96), rgba(8, 17, 31, 0.98));
+}
+
+.servicepilot-card {
+    background:
+        radial-gradient(circle at 88% 16%, rgba(40, 214, 194, 0.18), transparent 34%),
         linear-gradient(180deg, rgba(17, 31, 50, 0.96), rgba(8, 17, 31, 0.98));
 }
 
@@ -1133,11 +1145,14 @@ a {
 
 @media (max-width: 900px) {
     .hero-grid,
-    .solutions-grid,
     .blog-grid,
     .platform-grid,
     .footer-content {
         grid-template-columns: 1fr;
+    }
+
+    .solutions-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .hero {
@@ -1240,6 +1255,10 @@ a {
         left: 4px;
     }
 
+    .node-servicepilot {
+        left: 4px;
+    }
+
     .node-aegis {
         right: 4px;
     }
@@ -1268,6 +1287,10 @@ a {
     }
 
     .about-features {
+        grid-template-columns: 1fr;
+    }
+
+    .solutions-grid {
         grid-template-columns: 1fr;
     }
 
