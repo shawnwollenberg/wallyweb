@@ -330,8 +330,8 @@ a {
     background: linear-gradient(135deg, var(--primary), var(--accent));
 }
 
-.node-servicepilot {
-    width: 136px;
+.node-officeanywhere {
+    width: 156px;
     height: 58px;
     left: 34px;
     bottom: 28px;
@@ -422,7 +422,7 @@ a {
 
 .solutions-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.25rem;
 }
 
@@ -450,7 +450,7 @@ a {
     border-color: rgba(148, 163, 184, 0.26);
 }
 
-.servicepilot-solution {
+.officeanywhere-solution {
     background:
         radial-gradient(circle at 92% 12%, rgba(247, 185, 85, 0.2), transparent 34%),
         linear-gradient(145deg, #0d1a2b, #12253b);
@@ -581,7 +581,7 @@ a {
         linear-gradient(180deg, rgba(17, 31, 50, 0.96), rgba(8, 17, 31, 0.98));
 }
 
-.servicepilot-card {
+.officeanywhere-card {
     background:
         radial-gradient(circle at 88% 16%, rgba(40, 214, 194, 0.18), transparent 34%),
         linear-gradient(180deg, rgba(17, 31, 50, 0.96), rgba(8, 17, 31, 0.98));
@@ -1255,7 +1255,7 @@ a {
         left: 4px;
     }
 
-    .node-servicepilot {
+    .node-officeanywhere {
         left: 4px;
     }
 
