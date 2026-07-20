@@ -78,6 +78,29 @@ if [ -f "favicon.svg" ]; then
         --profile "$AWS_PROFILE"
 fi
 
+# Upload wallet sub-app (explicit content types — sync's --exclude index.html
+# would otherwise drop wallet/index.html since the glob matches at any depth).
+if [ -d "wallet" ]; then
+    echo "📤 Uploading wallet sub-app..."
+    if [ -f "wallet/index.html" ]; then
+        aws s3 cp wallet/index.html "s3://$BUCKET_NAME/wallet/index.html" \
+            --content-type "text/html" \
+            --profile "$AWS_PROFILE"
+    fi
+    if [ -f "wallet/wallet.css" ]; then
+        aws s3 cp wallet/wallet.css "s3://$BUCKET_NAME/wallet/wallet.css" \
+            --content-type "text/css" \
+            --cache-control "max-age=31536000" \
+            --profile "$AWS_PROFILE"
+    fi
+    if [ -f "wallet/wallet.js" ]; then
+        aws s3 cp wallet/wallet.js "s3://$BUCKET_NAME/wallet/wallet.js" \
+            --content-type "application/javascript" \
+            --cache-control "max-age=31536000" \
+            --profile "$AWS_PROFILE"
+    fi
+fi
+
 # Upload any other files (images, etc.) - these will use default content types
 # Note: We exclude the files we already uploaded with correct content types
 echo "📤 Uploading other files..."
@@ -96,6 +119,9 @@ aws s3 sync . "s3://$BUCKET_NAME" \
     --exclude "styles.css" \
     --exclude "script.js" \
     --exclude "favicon.svg" \
+    --exclude "wallet/*" \
+    --exclude "CLAUDE.md" \
+    --exclude "cloudfront-rewrite.js" \
     --delete \
     --profile "$AWS_PROFILE"
 
@@ -133,14 +159,18 @@ fi
 echo "✅ Content types verified"
 
 # Set cache control (optional - cache static assets)
+# NOTE: --metadata-directive REPLACE wipes ALL metadata, so we must re-set
+# --content-type alongside --cache-control or S3 defaults it to binary/octet-stream.
 echo "⚙️  Setting cache headers..."
 aws s3 cp "s3://$BUCKET_NAME/styles.css" "s3://$BUCKET_NAME/styles.css" \
     --cache-control "max-age=31536000" \
+    --content-type "text/css" \
     --metadata-directive REPLACE \
     --profile "$AWS_PROFILE"
 
 aws s3 cp "s3://$BUCKET_NAME/script.js" "s3://$BUCKET_NAME/script.js" \
     --cache-control "max-age=31536000" \
+    --content-type "application/javascript" \
     --metadata-directive REPLACE \
     --profile "$AWS_PROFILE"
 
