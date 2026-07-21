@@ -322,10 +322,13 @@ a {
 }
 
 .node-core {
-    width: 94px;
+    width: 120px;
     height: 94px;
-    left: calc(50% - 47px);
+    left: calc(50% - 60px);
     top: 92px;
+    padding: 0.75rem;
+    text-align: center;
+    line-height: 1.15;
     color: #06111f;
     background: linear-gradient(135deg, var(--primary), var(--accent));
 }
@@ -454,6 +457,14 @@ a {
     background:
         radial-gradient(circle at 92% 12%, rgba(247, 185, 85, 0.2), transparent 34%),
         linear-gradient(145deg, #0d1a2b, #12253b);
+}
+
+.mission-control-solution {
+    grid-column: 1 / -1;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(106, 169, 255, 0.24), transparent 34%),
+        radial-gradient(circle at 15% 100%, rgba(40, 214, 194, 0.14), transparent 38%),
+        linear-gradient(145deg, #091523, #14283f);
 }
 
 .solution-topline {
