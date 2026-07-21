@@ -2,14 +2,130 @@
    Master password → PBKDF2-SHA256 → AES-GCM key (memory only).
    Vault ciphertext lives in localStorage; key is wiped on lock/close. */
 
-(() => {
+const WalletVault = (() => {
   'use strict';
-
-  // ---------- Constants ----------
   const STORAGE_KEY = 'wallyweb:wallet:v1';
+  const VERSION = 1;
   const PBKDF2_ITERS = 310000;
   const SALT_LEN = 16;
   const IV_LEN = 12;
+
+  class VaultDataError extends Error {
+    constructor(message) { super(message); this.name = 'VaultDataError'; }
+  }
+
+  function getCrypto() {
+    if (typeof globalThis.crypto === 'undefined' || !globalThis.crypto.subtle) {
+      throw new Error('Web Crypto is unavailable');
+    }
+    return globalThis.crypto;
+  }
+
+  function buf2b64(buf) {
+    const bytes = ArrayBuffer.isView(buf)
+      ? new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength)
+      : new Uint8Array(buf);
+    if (typeof btoa === 'function') return btoa(String.fromCharCode(...bytes));
+    return Buffer.from(bytes).toString('base64');
+  }
+
+  function b642bytes(value, field) {
+    if (typeof value !== 'string' || !value || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(value)) {
+      throw new VaultDataError(`Invalid ${field}`);
+    }
+    let bytes;
+    try {
+      if (typeof atob === 'function') bytes = Uint8Array.from(atob(value), c => c.charCodeAt(0));
+      else bytes = new Uint8Array(Buffer.from(value, 'base64'));
+    } catch { throw new VaultDataError(`Invalid ${field}`); }
+    if (buf2b64(bytes) !== value) throw new VaultDataError(`Invalid ${field}`);
+    return bytes;
+  }
+
+  function validatePayload(value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value) || !Array.isArray(value.cards)) {
+      throw new VaultDataError('Invalid vault plaintext');
+    }
+    return value;
+  }
+
+  function parseRecord(value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) throw new VaultDataError('Invalid vault record');
+    if (value.v !== VERSION) throw new VaultDataError('Unsupported vault version');
+    const salt = b642bytes(value.salt, 'salt');
+    const iv = b642bytes(value.iv, 'iv');
+    const ct = b642bytes(value.ct, 'ciphertext');
+    if (salt.byteLength !== SALT_LEN || iv.byteLength !== IV_LEN || ct.byteLength < 16) throw new VaultDataError('Invalid vault record');
+    return { salt, iv, ct };
+  }
+
+  async function deriveKey(password, salt) {
+    const webcrypto = getCrypto();
+    const baseKey = await webcrypto.subtle.importKey(
+      'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']
+    );
+    return webcrypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt, iterations: PBKDF2_ITERS, hash: 'SHA-256' },
+      baseKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+    );
+  }
+
+  async function encryptWithKey(key, plaintextObj) {
+    validatePayload(plaintextObj);
+    const webcrypto = getCrypto();
+    const iv = webcrypto.getRandomValues(new Uint8Array(IV_LEN));
+    const data = new TextEncoder().encode(JSON.stringify(plaintextObj));
+    const ct = await webcrypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, data);
+    return { iv, ct };
+  }
+
+  async function decryptWithKey(key, iv, ct) {
+    const pt = await getCrypto().subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+    let value;
+    try { value = JSON.parse(new TextDecoder().decode(pt)); }
+    catch { throw new VaultDataError('Invalid vault plaintext'); }
+    return validatePayload(value);
+  }
+
+  async function encrypt(password, plaintextObj, suppliedSalt) {
+    const salt = suppliedSalt ? new Uint8Array(suppliedSalt) : getCrypto().getRandomValues(new Uint8Array(SALT_LEN));
+    if (salt.byteLength !== SALT_LEN) throw new VaultDataError('Invalid salt');
+    const key = await deriveKey(password, salt);
+    const { iv, ct } = await encryptWithKey(key, plaintextObj);
+    return { v: VERSION, salt: buf2b64(salt), iv: buf2b64(iv), ct: buf2b64(ct) };
+  }
+
+  async function decrypt(password, record) {
+    const { salt, iv, ct } = parseRecord(record);
+    return decryptWithKey(await deriveKey(password, salt), iv, ct);
+  }
+
+  function serialize(record) { parseRecord(record); return JSON.stringify(record); }
+  function deserialize(raw) {
+    if (raw === null || raw === undefined) return null;
+    if (typeof raw !== 'string') throw new VaultDataError('Invalid vault serialization');
+    let record;
+    try { record = JSON.parse(raw); } catch { throw new VaultDataError('Invalid vault serialization'); }
+    parseRecord(record);
+    return record;
+  }
+
+  return {
+    STORAGE_KEY, VERSION, PBKDF2_ITERS, SALT_LEN, IV_LEN, VaultDataError,
+    deriveKey, encryptWithKey, decryptWithKey, encrypt, decrypt, parseRecord, serialize, deserialize, buf2b64,
+  };
+})();
+
+if (typeof module !== 'undefined' && module.exports) module.exports = WalletVault;
+
+(() => {
+  'use strict';
+
+  // Requiring this file in Node exposes the vault API without starting the DOM application.
+  if (typeof document === 'undefined') return;
+
+  // ---------- Constants ----------
+  const { STORAGE_KEY, SALT_LEN } = WalletVault;
 
   // Maps ZXing format name (string) → bwip-js bcid.
   const ZXING_TO_BWIP = {
@@ -50,8 +166,6 @@
   // ---------- Tiny helpers ----------
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-  const buf2b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
-  const b642buf = (b64) => Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer;
   const uid = () => 'c_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
   function toast(msg, ms = 2200) {
@@ -63,39 +177,16 @@
   }
 
   // ---------- Crypto ----------
-  async function deriveKey(password, salt) {
-    const enc = new TextEncoder();
-    const baseKey = await crypto.subtle.importKey(
-      'raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']
-    );
-    return crypto.subtle.deriveKey(
-      { name: 'PBKDF2', salt, iterations: PBKDF2_ITERS, hash: 'SHA-256' },
-      baseKey,
-      { name: 'AES-GCM', length: 256 },
-      false,
-      ['encrypt', 'decrypt']
-    );
-  }
-
-  async function encryptVault(key, plaintextObj) {
-    const iv = crypto.getRandomValues(new Uint8Array(IV_LEN));
-    const data = new TextEncoder().encode(JSON.stringify(plaintextObj));
-    const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, data);
-    return { iv, ct };
-  }
-
-  async function decryptVault(key, ivBuf, ctBuf) {
-    const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ivBuf }, key, ctBuf);
-    return JSON.parse(new TextDecoder().decode(pt));
-  }
+  const deriveKey = WalletVault.deriveKey;
+  const encryptVault = WalletVault.encryptWithKey;
+  const decryptVault = WalletVault.decryptWithKey;
 
   // ---------- Persistence ----------
   function readBlob() {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    try { return JSON.parse(raw); } catch { return null; }
+    return WalletVault.deserialize(raw);
   }
-  function writeBlob(blob) { localStorage.setItem(STORAGE_KEY, JSON.stringify(blob)); }
+  function writeBlob(blob) { localStorage.setItem(STORAGE_KEY, WalletVault.serialize(blob)); }
   function wipeBlob() { localStorage.removeItem(STORAGE_KEY); }
 
   // ---------- App state ----------
@@ -110,9 +201,9 @@
     const { iv, ct } = await encryptVault(state.key, { cards: state.cards });
     writeBlob({
       v: 1,
-      salt: buf2b64(state.salt),
-      iv: buf2b64(iv),
-      ct: buf2b64(ct),
+      salt: WalletVault.buf2b64(state.salt),
+      iv: WalletVault.buf2b64(iv),
+      ct: WalletVault.buf2b64(ct),
     });
   }
 
@@ -130,7 +221,15 @@
   function showLockScreen() {
     $('#app').hidden = true;
     $('#lockScreen').hidden = false;
-    const blob = readBlob();
+    let blob;
+    try { blob = readBlob(); }
+    catch {
+      $('#setupForm').hidden = true;
+      $('#unlockForm').hidden = false;
+      $('#setupErr').textContent = '';
+      $('#unlockErr').textContent = 'Wallet data is corrupted. Erase it to start over.';
+      return;
+    }
     const hasVault = !!blob;
     $('#setupForm').hidden = hasVault;
     $('#unlockForm').hidden = !hasVault;
@@ -166,13 +265,13 @@
     e.preventDefault();
     const pw = $('#unlockPw').value;
     const err = $('#unlockErr');
-    const blob = readBlob();
+    let blob;
+    try { blob = readBlob(); }
+    catch { err.textContent = 'Wallet data is corrupted. Erase it to start over.'; return; }
     if (!blob) { showLockScreen(); return; }
     err.textContent = 'Unlocking…';
     try {
-      const salt = new Uint8Array(b642buf(blob.salt));
-      const iv = new Uint8Array(b642buf(blob.iv));
-      const ct = b642buf(blob.ct);
+      const { salt, iv, ct } = WalletVault.parseRecord(blob);
       const key = await deriveKey(pw, salt);
       const data = await decryptVault(key, iv, ct);
       state.key = key;
@@ -181,8 +280,10 @@
       $('#unlockPw').value = '';
       err.textContent = '';
       enterApp();
-    } catch {
-      err.textContent = 'Wrong password.';
+    } catch (error) {
+      err.textContent = error instanceof WalletVault.VaultDataError
+        ? 'Wallet data is corrupted. Erase it to start over.'
+        : 'Wrong password.';
       $('#unlockPw').select();
     }
   });
