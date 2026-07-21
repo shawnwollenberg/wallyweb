@@ -1,137 +1,96 @@
-// AWS Lambda function for contact form
-// Deploy this to AWS Lambda and connect via API Gateway
-
+// AWS Lambda contact handler. Dependencies are injectable so tests never create a live SES client.
 const nodemailer = require('nodemailer');
 const aws = require('aws-sdk');
 
-// Configure SES transporter
-const createTransporter = () => {
-  // Get region from environment variable or Lambda context
-  // Note: AWS_REGION is automatically set by Lambda, but we use SES_REGION to avoid conflicts
-  const region = process.env.SES_REGION || process.env.AWS_REGION || 'us-east-2';
-  
-  // Create SES instance with region
-  const ses = new aws.SES({
-    region: region,
-  });
+const SUCCESS_MESSAGE = 'Thank you for your message! We\'ll get back to you soon.';
+const ERROR_MESSAGE = 'Something went wrong. Please try again later.';
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // Use nodemailer with AWS SES
-  return nodemailer.createTransport({
-    SES: { ses, aws },
-  });
-};
-
-exports.handler = async (event) => {
-  // Handle CORS
-  const headers = {
-    'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || '*',
+function headersFor(env = process.env) {
+  return {
+    'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN || '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Content-Type': 'application/json',
   };
+}
 
-  // Handle preflight requests
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers,
-      body: '',
-    };
-  }
+function response(statusCode, headers, payload) {
+  return { statusCode, headers, body: payload === null ? '' : JSON.stringify(payload) };
+}
 
-  // Only allow POST
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ success: false, message: 'Method not allowed' }),
-    };
-  }
+function validateContact(input) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) return false;
+  return typeof input.name === 'string' && !!input.name.trim()
+    && typeof input.email === 'string' && EMAIL_RE.test(input.email)
+    && typeof input.service === 'string' && !!input.service.trim()
+    && typeof input.message === 'string' && !!input.message.trim();
+}
 
-  try {
-    // Parse request body
-    const body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
-    const { name, email, company, service, message } = body;
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  })[char]);
+}
 
-    // Validate required fields
-    if (!name || !email || !service || !message) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({
-          success: false,
-          message: 'All required fields must be provided',
-        }),
-      };
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({
-          success: false,
-          message: 'Invalid email format',
-        }),
-      };
-    }
-
-    // Create email content
-    const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: process.env.CONTACT_EMAIL,
-      replyTo: email,
-      subject: `New Contact Form Submission - ${service}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        ${company ? `<p><strong>Company:</strong> ${company}</p>` : ''}
-        <p><strong>Service Interest:</strong> ${service}</p>
+function buildMailOptions(input, env = process.env) {
+  const { name, email, company, service, message } = input;
+  const companyHtml = company ? `\n        <p><strong>Company:</strong> ${escapeHtml(company)}</p>` : '';
+  const companyText = company ? `\nCompany: ${company}` : '';
+  return {
+    from: env.EMAIL_FROM,
+    to: env.CONTACT_EMAIL,
+    replyTo: email,
+    subject: `New Contact Form Submission - ${service}`,
+    html: `<h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>${companyHtml}
+        <p><strong>Service Interest:</strong> ${escapeHtml(service)}</p>
         <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-      `,
-      text: `
-        New Contact Form Submission
-        
-        Name: ${name}
-        Email: ${email}
-        ${company ? `Company: ${company}` : ''}
-        Service Interest: ${service}
-        
-        Message:
-        ${message}
-      `,
-    };
+        <p>${escapeHtml(message).replace(/\r?\n/g, '<br>')}</p>`,
+    text: `New Contact Form Submission
 
-    // Send email using SES
-    const transporter = createTransporter();
-    await transporter.sendMail(mailOptions);
+Name: ${name}
+Email: ${email}${companyText}
+Service Interest: ${service}
 
-    // Optional: Save to DynamoDB or other storage
-    // const dynamodb = new AWS.DynamoDB.DocumentClient();
-    // await dynamodb.put({...}).promise();
+Message:
+${message}`,
+  };
+}
 
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({
-        success: true,
-        message: 'Thank you for your message! We\'ll get back to you soon.',
-      }),
-    };
-  } catch (error) {
-    console.error('Error processing contact form:', error);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        success: false,
-        message: 'Something went wrong. Please try again later.',
-      }),
-    };
-  }
-};
+function createTransporter(env = process.env) {
+  const ses = new aws.SES({ region: env.SES_REGION || env.AWS_REGION || 'us-east-2' });
+  return nodemailer.createTransport({ SES: { ses, aws } });
+}
 
+function createHandler(options = {}) {
+  const env = options.env || process.env;
+  const getTransporter = options.createTransporter || (() => createTransporter(env));
+  return async event => {
+    const headers = headersFor(env);
+    const method = event && event.httpMethod;
+    if (method === 'OPTIONS') return response(200, headers, null);
+    if (method !== 'POST') return response(405, headers, { success: false, message: 'Method not allowed' });
+
+    let body;
+    try {
+      body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
+    } catch {
+      return response(400, headers, { success: false, message: 'Invalid request body' });
+    }
+    if (!validateContact(body)) {
+      return response(400, headers, { success: false, message: 'All required fields must be valid' });
+    }
+    try {
+      await getTransporter().sendMail(buildMailOptions(body, env));
+      return response(200, headers, { success: true, message: SUCCESS_MESSAGE });
+    } catch (error) {
+      if (options.logErrors !== false) console.error('Error processing contact form:', error);
+      return response(500, headers, { success: false, message: ERROR_MESSAGE });
+    }
+  };
+}
+
+const handler = createHandler();
+module.exports = { handler, createHandler, createTransporter, buildMailOptions, validateContact, headersFor, SUCCESS_MESSAGE, ERROR_MESSAGE };
