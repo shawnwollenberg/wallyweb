@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#08111f">
-    <meta name="description" content="WallyWeb builds AI solutions for multi-agent coordination, local service operations, agentic commerce, wallet intelligence, automation, and operational workflows. Explore Mission Control, OfficeAnywhere, Aegis Smart Accounts, Cortex, and walletLens.">
+    <meta name="description" content="WallyWeb builds AI solutions for multi-agent coordination, local service operations, agentic commerce, wallet intelligence, automation, and operational workflows. Explore Mission Control, OfficeAnywhere, Aegis Smart Accounts, Cortex, walletLens, and x402 Compass.">
     <title>WallyWeb - AI Solutions Platform</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="apple-touch-icon" href="favicon.svg">
@@ -27,6 +27,7 @@
                     <li><a href="#officeanywhere">OfficeAnywhere</a></li>
                     <li><a href="#cortex">Cortex</a></li>
                     <li><a href="#walletlens">walletLens</a></li>
+                    <li><a href="#compass">Compass</a></li>
                     <li><a href="#blog">Blog</a></li>
                     <li><a href="#platform">Platform</a></li>
                     <li><a href="#contact">Contact</a></li>
@@ -74,6 +75,7 @@
                         <div><span class="prompt">&gt;</span> missionControl.delegate(mission)</div>
                         <div><span class="prompt">&gt;</span> officeAnywhere.capture(inbound_call)</div>
                         <div><span class="prompt">&gt;</span> walletLens.resolve(EVM)</div>
+                        <div><span class="prompt">&gt;</span> compass.recommend(task)</div>
                         <div><span class="prompt">&gt;</span> aegis.guardrails(authorize)</div>
                         <div><span class="prompt">&gt;</span> cortex.settle(x402)</div>
                         <div class="terminal-ok">ready_for_next_action: true</div>
@@ -86,7 +88,7 @@
             <div class="container">
                 <div class="section-heading">
                     <p class="eyebrow">Initial solutions</p>
-                    <h2 class="section-title">Five live AI products, one expanding platform.</h2>
+                    <h2 class="section-title">Six AI products, one expanding platform.</h2>
                     <p class="section-subtitle">WallyWeb is moving from bespoke software delivery to a portfolio of products that expose useful work through clean interfaces, delegated authority, operational automation, pay-per-use access, and AI-friendly documentation.</p>
                 </div>
 
@@ -165,11 +167,27 @@
                         <p class="solution-lede">An agent-native API for normalized EVM wallet portfolio intelligence.</p>
                         <p>One request returns token balances, USD pricing, recent activity, and a pre-computed portfolio summary across Base, Ethereum, Optimism, Arbitrum, and Polygon.</p>
                         <ul class="solution-list">
-                            <li>Pay-per-call x402 access</li>
+                            <li>x402 on Base: /portfolio and /tx-history $0.005, /wallet-report $0.02</li>
                             <li>OpenAPI, llms.txt, and agent skill docs</li>
                             <li>Local MCP server support</li>
                         </ul>
                         <a href="https://walletlens.wallyweb.com" class="text-link" target="_blank" rel="noopener">Visit walletLens</a>
+                    </article>
+
+                    <article id="compass" class="solution-card">
+                        <div class="solution-topline">
+                            <span class="solution-badge">x402 discovery</span>
+                            <span class="solution-status">New</span>
+                        </div>
+                        <h3>x402 Compass</h3>
+                        <p class="solution-lede">A paid ranking API over the Coinbase Bazaar catalog.</p>
+                        <p>Ask for a task, such as wallet portfolio on Base or token price, and Compass returns matching x402 services with url, method, price, network, description, and a quality score. Listings with concentrated payers, self-paid activity, short call bursts, or stale usage rank lower.</p>
+                        <ul class="solution-list">
+                            <li>GET /v1/x402/recommend at $0.005 USDC</li>
+                            <li>Exact x402 settlement on Base mainnet</li>
+                            <li>Hourly catalog cache, with onchain padding checks</li>
+                        </ul>
+                        <a href="https://compass.wallyweb.com" class="text-link" target="_blank" rel="noopener">Visit x402 Compass</a>
                     </article>
                 </div>
             </div>
@@ -369,12 +387,12 @@
                         <p class="launch-tagline">A paid <abbr title="HTTP-native pay-per-call protocol">x402</abbr> API and local <abbr title="Model Context Protocol">MCP</abbr> server for AI agents that need normalized EVM wallet portfolio data.</p>
                     </div>
 
-                    <p class="launch-lede">Agents can call walletLens directly for token balances, USD pricing, recent activity, portfolio summaries, stablecoin exposure, top positions, and data-coverage warnings for any <code>0x</code> address across five EVM chains.</p>
+                    <p class="launch-lede">Agents can call walletLens directly for token balances, USD pricing, recent activity, portfolio summaries, stablecoin exposure, top positions, and data-coverage warnings for any <code>0x</code> address across five EVM chains. Calls settle in USDC on Base: <code>/portfolio</code> and <code>/tx-history</code> are $0.005, and <code>/wallet-report</code> is $0.02.</p>
 
                     <ul class="launch-stats">
-                        <li><strong>5</strong><span>EVM chains</span></li>
-                        <li><strong>$0.02</strong><span>per call, USDC</span></li>
-                        <li><strong>x402</strong><span>on Base mainnet</span></li>
+                        <li><strong>$0.005</strong><span>/portfolio</span></li>
+                        <li><strong>$0.005</strong><span>/tx-history</span></li>
+                        <li><strong>$0.02</strong><span>/wallet-report</span></li>
                     </ul>
 
                     <div class="launch-chains" aria-label="Supported chains">
@@ -447,6 +465,49 @@
 
                     <div class="launch-cta">
                         <a href="https://walletlens.wallyweb.com" class="btn btn-primary" target="_blank" rel="noopener">Open walletLens</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="launch-card compass-card" id="compass-api">
+                    <div class="launch-header">
+                        <span class="launch-badge">
+                            <span class="launch-pulse" aria-hidden="true"></span>
+                            New x402 discovery API
+                        </span>
+                        <h2 class="launch-title">x402 Compass</h2>
+                        <p class="launch-tagline">Rank Coinbase Bazaar services for a task, and down-rank listings whose payments look concentrated, self-paid, bursty, or stale.</p>
+                    </div>
+
+                    <p class="launch-lede">One paid call searches the cached Bazaar catalog. Each row includes the service URL, HTTP method, USDC price, network, description, quality score, and the reasons behind the rank. The catalog refreshes about once an hour, so the per-call work stays small.</p>
+
+                    <ul class="launch-stats">
+                        <li><strong>$0.005</strong><span>per call, USDC</span></li>
+                        <li><strong>Base</strong><span>exact x402</span></li>
+                        <li><strong>Hourly</strong><span>catalog cache</span></li>
+                    </ul>
+
+                    <div class="launch-resources">
+                        <h3>Recommend endpoint</h3>
+                        <p class="launch-resources-sub">GET, settled in USDC on Base. A task query is required. Optional filters are <code>maxPrice</code>, <code>network</code>, and <code>asset</code>.</p>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <div class="resource-meta">
+                                    <span class="resource-label">Example call</span>
+                                    <a class="resource-url" href="https://compass.wallyweb.com/v1/x402/recommend?q=wallet%20portfolio%20on%20Base" target="_blank" rel="noopener">compass.wallyweb.com/v1/x402/recommend</a>
+                                </div>
+                                <button class="copy-btn" type="button" data-copy="https://compass.wallyweb.com/v1/x402/recommend?q=wallet%20portfolio%20on%20Base" aria-label="Copy x402 Compass recommend URL">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span class="copy-label">Copy</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="launch-cta">
+                        <a href="https://compass.wallyweb.com" class="btn btn-primary" target="_blank" rel="noopener">Open x402 Compass</a>
+                        <a href="#compass" class="btn btn-secondary">Back to the summary</a>
                     </div>
                 </div>
             </div>
@@ -539,7 +600,7 @@
                 <div class="section-heading">
                     <p class="eyebrow">Contact</p>
                     <h2 class="section-title">Build, integrate, or mentor around AI workflows.</h2>
-                    <p class="section-subtitle">Reach out about Mission Control, OfficeAnywhere, Aegis Smart Accounts, Cortex, walletLens, agentic commerce, wallet intelligence, AI workflow automation, or the planned mentorship and writing work.</p>
+                    <p class="section-subtitle">Reach out about Mission Control, OfficeAnywhere, Aegis Smart Accounts, Cortex, walletLens, x402 Compass, agentic commerce, wallet intelligence, AI workflow automation, or the planned mentorship and writing work.</p>
                 </div>
                 <div class="contact-content">
                     <form class="contact-form" id="contactForm">
@@ -564,6 +625,7 @@
                                 <option value="cortex">Cortex</option>
                                 <option value="project-aegis">Aegis Smart Accounts</option>
                                 <option value="walletlens">walletLens</option>
+                                <option value="compass">x402 Compass</option>
                                 <option value="agentic-commerce">Agentic commerce</option>
                                 <option value="mentorship">Mentorship / blog</option>
                                 <option value="ai-workflow">AI workflow automation</option>
@@ -612,6 +674,7 @@
                         <li><a href="https://app.projectaegis.ai" target="_blank" rel="noopener">Aegis Smart Accounts</a></li>
                         <li><a href="https://cortex.projectaegis.ai" target="_blank" rel="noopener">Cortex</a></li>
                         <li><a href="https://walletlens.wallyweb.com" target="_blank" rel="noopener">walletLens</a></li>
+                        <li><a href="https://compass.wallyweb.com" target="_blank" rel="noopener">x402 Compass</a></li>
                     </ul>
                 </div>
             </div>

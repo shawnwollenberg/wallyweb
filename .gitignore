@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
 package-lock.json
+# The Compass service is deployed from its own lockfile.
+!compass/package-lock.json
 
 # Environment variables
 .env
@@ -22,6 +24,7 @@ Thumbs.db
 # Build outputs
 dist/
 build/
+cdk.out/
 *.zip
 
 # Lambda deployment

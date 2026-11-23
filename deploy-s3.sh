@@ -120,6 +120,10 @@ aws s3 sync . "s3://$BUCKET_NAME" \
     --exclude "script.js" \
     --exclude "favicon.svg" \
     --exclude "wallet/*" \
+    --exclude "compass/*" \
+    --exclude "compass/*/*" \
+    --exclude "compass/*/*/*" \
+    --exclude "compass/*/*/*/*" \
     --exclude "CLAUDE.md" \
     --exclude "cloudfront-rewrite.js" \
     --delete \
