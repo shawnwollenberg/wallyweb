@@ -1,0 +1,11 @@
+export const SERVICE_VERSION = "1.0.0";
+export const USER_AGENT = "x402-compass/1.0 (+https://compass.wallyweb.com)";
+export const CDP_FACILITATOR_URL = "https://api.cdp.coinbase.com/platform/v2/x402";
+export const CDP_DISCOVERY_RESOURCES_URL = `${CDP_FACILITATOR_URL}/discovery/resources`;
+export const BASE_MAINNET = "eip155:8453";
+export const BASE_USDC_ADDRESS = "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
+export const TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+export const STALE_AFTER_DAYS = 14;
+export const BURST_WINDOW_SECONDS = 10 * 60;
+export const BURST_MIN_TRANSFERS = 8;
+export const BURST_MAX_PAYERS = 2;

@@ -32,9 +32,12 @@ The Express server (`server.js`) is for local dev only; in production the contac
 ```
 /                  marketing page (index.html, styles.css, script.js)
 /wallet/           barcode wallet sub-app (client-side encrypted vault)
+/compass/          x402 Compass API (own Lambda deploy, not uploaded by deploy-s3.sh)
 ```
 
 Sub-apps live under path prefixes on the same bucket. Each one is self-contained — its own `index.html`, `*.css`, `*.js`. Don't share JS between the marketing site and sub-apps; CloudFront cache rules are simpler when each prefix is independent.
+
+`compass/` is a separate CDK service. Deploy it with `cd compass && npm run deploy:aws`. The static-site sync excludes that directory. See `compass/README.md`.
 
 ## Sub-app: /wallet/
 
@@ -49,4 +52,4 @@ Personal barcode wallet (grocery, library, pool passes). Tap a saved card to ren
 
 - Don't introduce build tooling for the static site. It's plain HTML/CSS/JS by design and `deploy-s3.sh` assumes that.
 - Don't commit `.env`, `*.zip`, or anything under `lambda/node_modules/`. `.gitignore` is set up; respect it.
-- The Lambda is deployed via `./deploy-lambda.sh`, not in the S3 deploy. Treat them as separate deployments.
+- The contact Lambda is deployed via `./deploy-lambda.sh`, not in the S3 deploy. x402 Compass is deployed from `compass/` with `npm run deploy:aws`. Treat each deploy as separate.

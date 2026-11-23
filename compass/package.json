@@ -1,0 +1,49 @@
+{
+  "name": "x402-compass",
+  "version": "1.0.0",
+  "private": true,
+  "description": "x402 Compass: a paid x402 API that ranks Coinbase Bazaar services and down-ranks padded activity.",
+  "type": "module",
+  "main": "dist/src/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/src/server.js",
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "test": "node --import tsx --test test/*.test.ts",
+    "check:discovery": "tsx scripts/check-discovery.ts",
+    "settle:once": "tsx scripts/settle-once.ts",
+    "cdk": "cdk",
+    "deploy:aws": "cdk deploy --profile wallyweb",
+    "destroy:aws": "cdk destroy --profile wallyweb"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@coinbase/cdp-sdk": "^1.62.0",
+    "@x402/core": "^2.32.0",
+    "@x402/evm": "^2.32.0",
+    "@x402/express": "^2.32.0",
+    "@x402/extensions": "^2.32.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "serverless-http": "^4.0.0",
+    "viem": "^2.55.10",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.8.0",
+    "aws-cdk": "^2.1134.0",
+    "aws-cdk-lib": "^2.263.0",
+    "constructs": "^10.8.0",
+    "esbuild": "^0.28.1",
+    "tsx": "^4.23.3",
+    "typescript": "^6.0.3"
+  },
+  "overrides": {
+    "@coinbase/cdp-sdk": {
+      "axios": "^1.19.0"
+    },
+    "ws@^8.0.0": "^8.21.1"
+  }
+}
