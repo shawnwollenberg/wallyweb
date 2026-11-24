@@ -3,6 +3,7 @@ import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { after, before, describe, it } from "node:test";
 import { createApp } from "../src/app.js";
+import { CDP_RESOURCE_DESCRIPTION_MAX, recommendRouteDescription } from "../src/schemas.js";
 
 let server: Server;
 let baseUrl: string;
@@ -58,8 +59,13 @@ describe("x402 Compass HTTP", () => {
     assert.equal(challenge.accepts?.[0]?.network, "eip155:8453");
     assert.equal(challenge.accepts?.[0]?.scheme, "exact");
     assert.equal(challenge.resource?.url, "https://compass.wallyweb.com/v1/x402/recommend");
-    assert.match(challenge.resource?.description ?? "", /\$0\.005/);
-    assert.ok((challenge.resource?.description ?? "").length <= 500);
+    const description = challenge.resource?.description ?? "";
+    assert.equal(description, recommendRouteDescription("0.005"));
+    assert.match(description, /\$0\.005/);
+    assert.ok(
+      description.length <= CDP_RESOURCE_DESCRIPTION_MAX,
+      `payment payload resource.description is ${description.length} characters; CDP accepts 500 and rejects 501`
+    );
     assert.ok(challenge.extensions?.bazaar);
   });
 

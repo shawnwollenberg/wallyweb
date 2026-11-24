@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { ActivitySummary } from "../src/activity.js";
-import { recommendRouteDescription } from "../src/schemas.js";
+import { assertCdpResourceDescription, CDP_RESOURCE_DESCRIPTION_MAX, recommendRouteDescription } from "../src/schemas.js";
 import { scoreService } from "../src/rank.js";
 import { NOW, service } from "./fixtures.js";
 
@@ -107,10 +107,16 @@ describe("ranking", () => {
     assert.equal(scoreService(service(), { q: "on the" }, { now: NOW, activity: null, activityStatus: "skipped" }), null);
   });
 
-  it("keeps the Bazaar description inside CDP's 500 character limit", () => {
+  it("keeps the 402 resource.description at or under CDP's 500 character limit", () => {
     const description = recommendRouteDescription("0.005");
-    assert.ok(description.length <= 500);
+    assert.equal(description.length, 322);
+    assert.ok(
+      description.length <= CDP_RESOURCE_DESCRIPTION_MAX,
+      `resource.description is ${description.length} characters; CDP accepts 500 and rejects 501`
+    );
     assert.match(description, /\$0\.005/);
     assert.match(description, /concentrated/);
+    assert.equal(assertCdpResourceDescription("a".repeat(500)).length, 500);
+    assert.throws(() => assertCdpResourceDescription("a".repeat(501)), /501/);
   });
 });

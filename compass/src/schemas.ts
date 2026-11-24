@@ -1,12 +1,21 @@
 import { z } from "zod";
 
+/** CDP verify accepts resource.description of 500 characters and rejects 501. */
+export const CDP_RESOURCE_DESCRIPTION_MAX = 500;
+
+export function assertCdpResourceDescription(description: string) {
+  if (description.length > CDP_RESOURCE_DESCRIPTION_MAX) {
+    throw new Error(
+      `resource.description is ${description.length} characters. CDP accepts ${CDP_RESOURCE_DESCRIPTION_MAX} and rejects ${CDP_RESOURCE_DESCRIPTION_MAX + 1}.`
+    );
+  }
+  return description;
+}
+
 export function recommendRouteDescription(priceUsd: string) {
   const description =
     `$${priceUsd} USDC per call on Base (eip155:8453). x402 Compass ranks Coinbase Bazaar services for a task and down-ranks listings whose activity looks concentrated, self-paid, bursty, or stale. Query: q (required), maxPrice, network, asset, limit. Response fields: url, method, price, network, description, qualityScore, reasons.`;
-  if (description.length > 500) {
-    throw new Error(`Bazaar description is ${description.length} characters. CDP rejects descriptions over 500.`);
-  }
-  return description;
+  return assertCdpResourceDescription(description);
 }
 
 export const recommendInputSchema = {
