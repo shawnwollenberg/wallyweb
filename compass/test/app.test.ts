@@ -69,14 +69,49 @@ describe("x402 Compass HTTP", () => {
     assert.ok(challenge.extensions?.bazaar);
   });
 
-  it("rejects an invalid recommend query before payment", async () => {
-    const missing = await fetch(`${baseUrl}/v1/x402/recommend`);
-    assert.equal(missing.status, 400);
-    const missingBody = (await missing.json()) as { code?: string };
-    assert.equal(missingBody.code, "invalid_request");
+  it("returns 402 for the bare resource URL CDP indexes", async () => {
+    const response = await fetch(`${baseUrl}/v1/x402/recommend`);
+    assert.equal(response.status, 402);
+    const challenge = readPaymentChallenge(response);
+    assert.equal(challenge.resource?.url, "https://compass.wallyweb.com/v1/x402/recommend");
+    assert.ok(challenge.extensions?.bazaar);
+    assert.equal(challenge.accepts?.[0]?.scheme, "exact");
+  });
 
+  it("returns 402 for an unpaid query", async () => {
+    const response = await fetch(`${baseUrl}/v1/x402/recommend?q=wallet`);
+    assert.equal(response.status, 402);
+    const challenge = readPaymentChallenge(response);
+    assert.equal(challenge.resource?.url, "https://compass.wallyweb.com/v1/x402/recommend");
+    assert.ok(challenge.extensions?.bazaar);
+  });
+
+  it("rejects a payment attempt that omits q before settlement", async () => {
+    for (const header of ["payment-signature", "x-payment"]) {
+      const response = await fetch(`${baseUrl}/v1/x402/recommend`, {
+        headers: { [header]: "not-a-payment" }
+      });
+      assert.equal(response.status, 400, header);
+      const body = (await response.json()) as { code?: string };
+      assert.equal(body.code, "invalid_request");
+      assert.equal(response.headers.get("payment-required"), null);
+    }
+  });
+
+  it("rejects an invalid recommend query before payment", async () => {
     const badPrice = await fetch(`${baseUrl}/v1/x402/recommend?q=price&maxPrice=free`);
     assert.equal(badPrice.status, 400);
+
+    const emptyQuery = await fetch(`${baseUrl}/v1/x402/recommend?q=`);
+    assert.equal(emptyQuery.status, 400);
+
+    const invalidAndMissing = await fetch(`${baseUrl}/v1/x402/recommend?maxPrice=free`);
+    assert.equal(invalidAndMissing.status, 400);
+
+    const paidInvalid = await fetch(`${baseUrl}/v1/x402/recommend?q=price&maxPrice=free`, {
+      headers: { "payment-signature": "not-a-payment" }
+    });
+    assert.equal(paidInvalid.status, 400);
   });
 
   it("returns JSON for unknown routes, the wrong method, and invalid JSON", async () => {
@@ -103,3 +138,13 @@ describe("x402 Compass HTTP", () => {
     assert.equal(response.headers.get("x-compass-required-parameter"), "q");
   });
 });
+
+function readPaymentChallenge(response: globalThis.Response) {
+  const header = response.headers.get("payment-required") || response.headers.get("x-payment-required");
+  assert.ok(header, `missing payment header: ${[...response.headers.keys()].join(",")}`);
+  return JSON.parse(Buffer.from(header, "base64url").toString("utf8")) as {
+    accepts?: Array<{ amount?: string; network?: string; scheme?: string }>;
+    resource?: { url?: string; description?: string };
+    extensions?: { bazaar?: unknown };
+  };
+}

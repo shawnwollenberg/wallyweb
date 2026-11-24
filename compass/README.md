@@ -20,9 +20,9 @@ GET /v1/x402/recommend
         ▼
 Express on Lambda (serverless-http)
         │
-        ├─ invalid query → JSON 400, no payment
-        ├─ unpaid GET → 402 exact / eip155:8453 / USDC, Bazaar extension
-        └─ paid GET
+        ├─ unpaid GET, including a missing q → 402 exact / eip155:8453 / USDC, Bazaar extension
+        ├─ payment header with a missing or invalid q, or any other invalid query → JSON 400, no settlement
+        └─ paid GET with a valid q
               ├─ hourly cache of CDP GET /discovery/resources
               ├─ text rank against url, description, tags, service name
               └─ Base USDC Transfer logs for the shortlisted payTo addresses
@@ -133,6 +133,8 @@ curl "http://localhost:3000/v1/x402/recommend?q=token%20price"
 
 CDP lists a route only after the CDP facilitator **settles** a payment. A 402, a verify, and a validate call are not enough. The settle payload must include `paymentPayload.resource`. The x402 client copies `resource` and `extensions.bazaar` from the 402. Listings with no settled activity for 30 days drop out of the catalog, so repeat a settled call at least that often.
 
+CDP then crawls the resource URL with no query, `GET /v1/x402/recommend`. That probe has to return 402. An unpaid request whose only problem is a missing `q` does. A request that already carries `payment-signature` or `x-payment`, or a query that is present but invalid, returns 400 and is not settled. After deploying this behavior, send one new settled call so CDP crawls the bare URL again.
+
 Use a dedicated Base wallet with a little USDC. This spends $0.005.
 
 ```bash
@@ -157,4 +159,4 @@ npm test
 npm run check
 ```
 
-`npm test` is 30 node:test cases. They cover catalog parsing and the hourly cache, USDC log parsing, burst versus ordinary identical payments, ranking penalties, the recommend response shape, the 402 challenge (`5000` atomic units, Bazaar extension, description includes `$0.005` and is at most 500 characters), JSON 400/404/405, and `/status`. `tsc --noEmit` covers the API, the CDK app, and the scripts. The test process pins a fake CDP key and never calls the facilitator or sends a payment.
+`npm test` is 33 node:test cases. They cover catalog parsing and the hourly cache, USDC log parsing, burst versus ordinary identical payments, ranking penalties, the recommend response shape, the 402 challenge (`5000` atomic units, Bazaar extension, description includes `$0.005` and is at most 500 characters), the queryless resource URL returning 402, a payment header with a missing `q` returning 400, JSON 400/404/405, and `/status`. `tsc --noEmit` covers the API, the CDK app, and the scripts. The test process pins a fake CDP key and never calls the facilitator or sends a payment.
