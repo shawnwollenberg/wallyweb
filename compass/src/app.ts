@@ -1,5 +1,6 @@
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
+import type { ZodError } from "zod";
 import { createActivityCache, fetchInboundUsdcTransfers } from "./activity.js";
 import { createCatalogCache, fetchDiscoveryPage, fileCatalogStorage } from "./catalog.js";
 import { config } from "./config.js";
@@ -121,17 +122,28 @@ export function createApp() {
       return;
     }
     const parsed = parseRecommendQuery(req.query as Record<string, unknown>);
-    if (!parsed.success) {
-      res.status(400).json({
-        error: "Invalid request",
-        message: "The request is invalid.",
-        code: "invalid_request",
-        details: formatZodError(parsed.error)
-      });
+    if (parsed.success) {
+      res.locals.recommendQuery = parsed.data;
+      next();
       return;
     }
-    res.locals.recommendQuery = parsed.data;
-    next();
+
+    // CDP indexes the resource URL with no query string and requires that probe
+    // to return 402. A missing q is not a payment attempt, so let the x402
+    // middleware advertise the route. A present payment header, or a query that
+    // is present but invalid, still fails here and is never settled.
+    const attemptingPayment = Boolean(req.get("payment-signature") || req.get("x-payment"));
+    if (!attemptingPayment && queryFailureIsOnlyMissingQ(parsed.error, req.query)) {
+      next();
+      return;
+    }
+
+    res.status(400).json({
+      error: "Invalid request",
+      message: "The request is invalid.",
+      code: "invalid_request",
+      details: formatZodError(parsed.error)
+    });
   });
 
   const payments = createPaymentMiddleware();
@@ -177,6 +189,14 @@ export function createApp() {
   });
 
   return app;
+}
+
+function queryFailureIsOnlyMissingQ(error: ZodError, query: Request["query"]) {
+  return error.issues.every(issue => {
+    if (issue.code !== "invalid_type") return false;
+    const key = issue.path[0];
+    return key === "q" && query.q === undefined;
+  });
 }
 
 function buildPaymentStatus() {
